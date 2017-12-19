@@ -4,7 +4,7 @@ const express = require('express')
 const mongoose = require('../mongodb/mongoose')
 
 const app = express()
-const port = 8000
+const port = process.env.PORT || 8000;
 
 var Todo = mongoose.model('Todo', {
     text: {
