@@ -1,5 +1,6 @@
 'use strict'
 const express = require('express')
+const bodyParser = require('body-parser');
 
 const mongoose = require('../mongodb/mongoose')
 
@@ -22,11 +23,6 @@ var Todo = mongoose.model('Todo', {
     }
 })
 
-
-app.listen(port, () => {
-    console.log('We are live on ' + port);
-});
-
 app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
@@ -35,15 +31,17 @@ app.use(function (req, res, next) {
     next();
 });
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.post('/', (req, res) => {
-    // You'll create your note here.
-    console.log(req.body)
+app.listen(port, () => {
+    console.log('We are live on ' + port);
+});
+
+app.get('/', (req, res) => {
     res.send('Connected to Server')
 });
 
 app.post('/push', (req, res) => {
-    console.log(req.body)
     var todo = new Todo({
         text: req.body.text,
         label: req.body.label,
@@ -56,15 +54,32 @@ app.post('/push', (req, res) => {
     })
 })
 
-app.get('/getall', (req, res) => {
-    Todo.find().then((r) => {
-        res.send({todos})
+app.delete('/pop/:id', (req, res) => {
+    var id = req.params.id;
+    Todo.findByIdAndRemove(id).then((todo) => {
+        if(!todo) {
+            return res.status(404).send();
+        }
+        res.send(todo);
     }).catch((e) => {
         res.status(400).send()
     })
 })
 
-app.post('/read', (req, res) => {
-    
+app.get('/getall', (req, res) => {
+    Todo.find().then((r) => {
+        res.send(r)
+    }).catch((e) => {
+        res.status(400).send()
+    })
+})
+
+app.get('/get:id', (req, res) => {
+    console.log(req.params);
+    Todo.find(ib).then((r) => {
+        res.send(r)
+    }).catch((e) => {
+        res.status(400).send()
+    })
     res.send(data)
 })

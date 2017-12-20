@@ -1,0 +1,34 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link type="text/css" href="./index.css" rel="stylesheet"> 
+</head>
+<body>
+    <div class="container" id="app">
+        <section class="panel">
+            <input v-bind:checked="areAllSelected" v-on:click="selectAll" type="checkbox" id="mark-all">
+            <input type="text" placeholder="What Shall i remind you?" autofocus class="text-input"
+            v-model="newTodo" v-on:keyup.enter="addTodo">
+            <button v-on:click="clearList">Clear List</button>
+        </section>
+    
+    <ul class="list">
+        <li v-for="todo in todoList" v-bind:class="{done: todo.checked}">
+        <input v-model="todo.checked" type="checkbox" class="checkbox">      
+        <label for="checkbox">{{ todo.text }}</label>
+        <button class="delete" v-on:click="removeTodo(todo)">X</button>      
+        </li>
+    </ul>
+    <pre>Last removed: {{ removed }}</pre>
+  </div>
+</body>
+<!-- 3rd party library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- local -->
+<script type="text/javascript" src="./index.js"></script>
+</script>
+</html>
